@@ -1,16 +1,17 @@
-# libfastmem for KallistiOS ##version##
-#
+# libfastmem for KallistiOS (KOSAIO Integrated)
+# 
 # Makefile
-
 
 TARGET = libfastmem.a
 OBJS = memcpy_fast.o memset_fast.o memmove_fast.o
 
-defaultall: create_kos_link $(OBJS) subdirs linklib
+# Using standard KOS Makefile rules directly if possible, or minimal definitions
+include $(KOS_BASE)/Makefile.rules
 
-include $(KOS_BASE)/addons/Makefile.prefab
+clean:
+	-rm -f $(TARGET) $(OBJS)
 
-# creates the kos link to the headers
-create_kos_link:
-	rm -f ../include/fastmem
-	ln -s ../libfastmem/include ../include/fastmem
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(KOS_AR) rcs $(TARGET) $(OBJS)
